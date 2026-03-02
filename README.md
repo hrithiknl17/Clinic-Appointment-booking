@@ -37,5 +37,7 @@ To run this project locally, you will need two terminal windows open—one for t
 ### 2. Backend Setup (FastAPI)
 Open a terminal and navigate to the `backend` folder:
 ```bash
+'cd backend'
+---
 
-###hello
+
