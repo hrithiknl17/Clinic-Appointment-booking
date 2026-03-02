@@ -135,3 +135,18 @@ def get_doctor_by_email(email: str):
         return {"error": "Not a doctor"}
         
     return {"doctor": response.data[0]}
+
+@app.get("/api/auth/check-role/{email}")
+def check_user_role(email: str):
+    # 1. Check if the user is an Admin
+    admin_response = supabase.table("admins").select("*").eq("email", email).execute()
+    if len(admin_response.data) > 0:
+        return {"role": "admin", "profile": admin_response.data[0]}
+        
+    # 2. Check if the user is a Doctor
+    doctor_response = supabase.table("doctors").select("*").eq("email", email).execute()
+    if len(doctor_response.data) > 0:
+        return {"role": "doctor", "profile": doctor_response.data[0]}
+        
+    # 3. If neither, they are a standard Patient
+    return {"role": "patient"}
