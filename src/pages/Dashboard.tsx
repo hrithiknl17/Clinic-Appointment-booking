@@ -24,7 +24,7 @@ const Dashboard = () => {
       if (!user?.email) return;
       
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/appointments/${user.email}`);
+        const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/appointments/${user.email}`);
         const data = await response.json();
 
         if (data.appointments) {
@@ -91,7 +91,7 @@ const Dashboard = () => {
   const handleCancel = async (id: string) => {
     try {
       // 1. Tell Python to update the database
-      const response = await fetch(`http://127.0.0.1:8000/api/appointments/${id}/cancel`, {
+      const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/appointments/${id}/cancel`, {
         method: "PATCH",
       });
 

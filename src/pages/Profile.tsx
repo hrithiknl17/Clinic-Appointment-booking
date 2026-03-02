@@ -82,7 +82,7 @@ const Profile = () => {
     if (!user?.email) return;
     
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/appointments/${user.email}`);
+      const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/appointments/${user.email}`);
       const data = await response.json();
 
       if (data.appointments) {
@@ -145,7 +145,7 @@ const Profile = () => {
   // Appointment handlers
   const handleCancel = async (id: string) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/appointments/${id}/cancel`, {
+      const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/appointments/${id}/cancel`, {
         method: "PATCH",
       });
 

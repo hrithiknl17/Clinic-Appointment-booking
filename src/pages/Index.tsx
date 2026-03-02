@@ -43,7 +43,7 @@ const Index = () => {
     const fetchData = async () => {
       try {
         // Fetch Doctors
-        const docRes = await fetch("http://127.0.0.1:8000/api/doctors");
+        const docRes = await fetch("https://clinic-appointment-booking-fglv.onrender.com/api/doctors");
         const docData = await docRes.json();
         const mappedDoctors = docData.doctors.map((doc: any) => ({
           id: doc.id,
@@ -59,7 +59,7 @@ const Index = () => {
         setRealDoctors(mappedDoctors);
 
         // NEW: Fetch Articles from Python
-        const artRes = await fetch("http://127.0.0.1:8000/api/articles");
+        const artRes = await fetch("https://clinic-appointment-booking-fglv.onrender.com/api/articles");
         const artData = await artRes.json();
         setRealArticles(artData.articles || []);
       } catch (error) {

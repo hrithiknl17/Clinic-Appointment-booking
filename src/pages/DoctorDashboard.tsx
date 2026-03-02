@@ -20,7 +20,7 @@ const DoctorDashboard = () => {
 
       try {
         // 1. Check if the logged in user is a doctor
-        const docRes = await fetch(`http://127.0.0.1:8000/api/doctors/by-email/${user.email}`);
+        const docRes = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/doctors/by-email/${user.email}`);
         const docData = await docRes.json();
 
         if (docData.error || !docData.doctor) {
@@ -32,7 +32,7 @@ const DoctorDashboard = () => {
         setDoctorInfo(docData.doctor);
 
         // 2. If they are a doctor, fetch their specific schedule
-        const schedRes = await fetch(`http://127.0.0.1:8000/api/doctor-dashboard/${docData.doctor.id}`);
+        const schedRes = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/doctor-dashboard/${docData.doctor.id}`);
         const schedData = await schedRes.json();
         
         if (schedData.appointments) {

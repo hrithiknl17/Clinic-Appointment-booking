@@ -11,7 +11,7 @@ const ArticleDetail = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/articles/${id}`);
+        const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/articles/${id}`);
         const data = await response.json();
         setArticle(data);
       } catch (error) {

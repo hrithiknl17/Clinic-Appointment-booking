@@ -32,7 +32,7 @@ const BookAppointment = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/doctors/${doctorId}`);
+        const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/doctors/${doctorId}`);
         const data = await response.json();
         if (data.doctor) {
           const doc = data.doctor;
@@ -106,7 +106,7 @@ const BookAppointment = () => {
       // Format the date properly for the database (YYYY-MM-DD)
       const formattedDate = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
       
-      const response = await fetch("http://127.0.0.1:8000/api/appointments", {
+      const response = await fetch("https://clinic-appointment-booking-fglv.onrender.com/api/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -24,7 +24,7 @@ const VideoCall = () => {
   useEffect(() => {
     const fetchCallDetails = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/appointments/single/${appointmentId}`);
+        const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/appointments/single/${appointmentId}`);
         const data = await response.json();
         
         if (data && data.doctors) {

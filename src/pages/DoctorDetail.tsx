@@ -16,7 +16,7 @@ const DoctorDetail = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/doctors/${doctorId}`);
+        const response = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/doctors/${doctorId}`);
         const data = await response.json();
 
         if (data.doctor) {
