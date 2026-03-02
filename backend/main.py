@@ -105,3 +105,33 @@ def get_article_detail(article_id: str):
     # Fetch a single article when a user clicks "Read More"
     response = supabase.table("articles").select("*").eq("id", article_id).single().execute()
     return response.data
+
+@app.get("/api/appointments/single/{appointment_id}")
+def get_single_appointment(appointment_id: str):
+    response = supabase.table("appointments") \
+        .select("*, doctors(*)") \
+        .eq("id", appointment_id) \
+        .single() \
+        .execute()
+    return response.data
+
+@app.get("/api/doctor-dashboard/{doctor_id}")
+def get_doctor_schedule(doctor_id: str):
+    # Fetch all appointments for this specific doctor, sorted by date and time
+    response = supabase.table("appointments") \
+        .select("*") \
+        .eq("doctor_id", doctor_id) \
+        .order("appointment_date", desc=False) \
+        .execute()
+        
+    return {"appointments": response.data}
+
+@app.get("/api/doctors/by-email/{email}")
+def get_doctor_by_email(email: str):
+    # Check if this email exists in the doctors table
+    response = supabase.table("doctors").select("*").eq("email", email).execute()
+    
+    if len(response.data) == 0:
+        return {"error": "Not a doctor"}
+        
+    return {"doctor": response.data[0]}

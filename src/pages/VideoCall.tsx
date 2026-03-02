@@ -2,14 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Mic, MicOff, VideoIcon, VideoOff, PhoneOff, MessageSquare, Monitor, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { upcomingAppointments, doctors } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
 
 const VideoCall = () => {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
-  const appointment = upcomingAppointments.find((a) => a.id === appointmentId);
-  const doctor = appointment ? doctors.find((d) => d.id === appointment.doctorId) : null;
+  
+  // NEW: State for real data
+  const [appointment, setAppointment] = useState<any>(null);
+  const [doctor, setDoctor] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCameraOn, setIsCameraOn] = useState(true);
@@ -18,13 +20,40 @@ const VideoCall = () => {
   const [callState, setCallState] = useState<"waiting" | "connected" | "ended">("waiting");
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // NEW: Fetch real appointment and doctor data
+  useEffect(() => {
+    const fetchCallDetails = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/appointments/single/${appointmentId}`);
+        const data = await response.json();
+        
+        if (data && data.doctors) {
+          setAppointment(data);
+          setDoctor({
+            id: data.doctors.id,
+            name: data.doctors.name,
+            specialty: data.doctors.specialty,
+            image: data.doctors.image_url,
+            avatar: data.doctors.name.charAt(4) // Hacky way to get a letter
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch call details", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (appointmentId) fetchCallDetails();
+  }, [appointmentId]);
+
+
   // Simulate connecting after 3 seconds
   useEffect(() => {
-    if (callState === "waiting") {
+    if (callState === "waiting" && doctor) {
       const timer = setTimeout(() => setCallState("connected"), 3000);
       return () => clearTimeout(timer);
     }
-  }, [callState]);
+  }, [callState, doctor]);
 
   // Call duration timer
   useEffect(() => {
@@ -66,6 +95,10 @@ const VideoCall = () => {
       stream.getTracks().forEach((t) => t.stop());
     }
   };
+
+  if (loading) {
+     return <div className="p-20 text-center animate-pulse text-muted-foreground">Preparing secure connection...</div>;
+  }
 
   if (!appointment || !doctor) {
     return (
