@@ -57,6 +57,14 @@ class AppointmentCreate(BaseModel):
     appointment_time: str
     appointment_type: str
 
+class DoctorCreate(BaseModel):
+    email: str
+    password: str
+    name: str
+    specialty: str
+    experience_years: int
+    image_url: str = "https://ui-avatars.com/api/?name=Dr"
+
 @app.post("/api/appointments")
 def create_appointment(appointment: AppointmentCreate):
     # Package the data for Supabase
@@ -150,3 +158,29 @@ def check_user_role(email: str):
         
     # 3. If neither, they are a standard Patient
     return {"role": "patient"}
+
+@app.post("/api/admin/doctors")
+def add_new_doctor(doc: DoctorCreate):
+    # 1. Create the secure login credential in Supabase Auth
+    try:
+        # Since you use the SERVICE_KEY in Render, this has admin rights!
+        auth_user = supabase.auth.admin.create_user({
+            "email": doc.email,
+            "password": doc.password,
+            "email_confirm": True
+        })
+    except Exception as e:
+        return {"error": f"Failed to create auth user: {str(e)}"}
+
+    # 2. Create their public profile in the 'doctors' table
+    db_data = {
+        "email": doc.email,
+        "name": doc.name,
+        "specialty": doc.specialty,
+        "experience_years": doc.experience_years,
+        "rating": 5.0, # Give them a perfect starting rating
+        "image_url": doc.image_url + "+" + doc.name.replace(" ", "+")
+    }
+    response = supabase.table("doctors").insert(db_data).execute()
+
+    return {"message": "Doctor created successfully", "doctor": response.data[0]}
