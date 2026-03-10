@@ -56,6 +56,11 @@ const Navbar = () => {
                   <User className="h-4 w-4" /> Profile
                 </Link>
               </Button>
+              {user?.email === "admin@medibook.com" && (
+                <a href="/admin" className="text-emerald-600 font-bold hover:underline ml-4">
+                  Admin Panel
+                </a>
+              )}
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-1" /> Sign out
               </Button>

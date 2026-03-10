@@ -16,6 +16,7 @@ import VideoCall from "./pages/VideoCall";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const AnimatedRoutes = () => {
           <Route path="/doctor/:doctorId" element={<DoctorDetail />} />
           <Route path="/book/:doctorId" element={<BookAppointment />} />
           <Route path="/dashboard" element={<Profile />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/video-call/:appointmentId" element={<VideoCall />} />
           <Route path="/article/:id" element={<ArticleDetail />} />
           <Route path="*" element={<NotFound />} />

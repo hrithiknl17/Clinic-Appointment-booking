@@ -37,12 +37,31 @@ const Auth = () => {
     }
 
     if (view === "login") {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         toast({ title: "Login failed", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "Welcome back!" });
-        navigate("/");
+      } else if (data.user?.email) {
+        toast({ title: "Verifying credentials..." });
+
+        // --- NEW SMART ROUTING LOGIC ---
+        try {
+          // Replace with your Render URL if testing on production
+          const roleRes = await fetch(`https://clinic-appointment-booking-fglv.onrender.com/api/auth/check-role/${data.user.email}`);
+          const roleData = await roleRes.json();
+
+          if (roleData.role === "admin") {
+            toast({ title: `Welcome Admin, ${roleData.profile.name}` });
+            navigate("/admin");
+          } else if (roleData.role === "doctor") {
+            toast({ title: `Welcome back, ${roleData.profile.name}` });
+            navigate("/provider");
+          } else {
+            toast({ title: "Welcome to MediBook!" });
+            navigate("/dashboard");
+          }
+        } catch (err) {
+          navigate("/dashboard"); // Fallback
+        }
       }
     } else {
       const { error } = await supabase.auth.signUp({
